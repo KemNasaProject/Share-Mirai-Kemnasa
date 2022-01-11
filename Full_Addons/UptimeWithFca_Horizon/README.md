@@ -9,7 +9,7 @@ Bước 1 : mở cmd nhập : npm i  node-notifier ping-monitor
 
 bước 2 tạo file uptime hoặc sử dụng file uptime trong tus trước (uptime trong github này) vô File Uptime.js Trong github này copy rồi patse vô
 
-bước cuối 5 : node uptime.js ( ở thư mục tạo file uptime.js pls)
+bước cuối 3 : node uptime.js ( ở thư mục tạo file uptime.js pls)
 
 kết quả sử dụng Uptime tus trước + tus này là siêu hiệu quả vs file listenMqtt đã fix hết lỗi gì đó token at ... gì đó kệ đi :v fix hết r , nếu như tải lại thì phải làm lại từ đầu do là file fca luôn luôn khác :v
 
