@@ -6,3 +6,4 @@
 + Xvideo : getVideo From Xvid
 + Tikvid : GetVideo From Tiktok No Api, logo
 + Chanle: lỗi money ae tự fix hoặc ko :v
++ emojimix : ghép emoji từ api google
