@@ -4,7 +4,7 @@ module.exports.config = {
   hasPermssion: 0,
   credits: "Horizon",
   description: "lấy video tiktok no logo",
-  commandCategory: "Penguin",
+  commandCategory: "Horizon",
   usages: "[url]",
   cooldowns: 5,
 };
@@ -18,34 +18,27 @@ module.exports.run = async function ({ api, event, args }) {
     try {
       let results = {};
       let key = await axios.get(
-        `https://api.snaptik.site/video-key?video_url=${event.messageReply.args[0]}`,
+        `http://api.leanhtruong.net/api-no-key/tiktok?url=${event.messageReply.args[0]}`,
       );
+      console.log(key)
       key = JSON.parse(JSON.stringify(key.data, null, 2));
-      if (key.status !== "success")
+      if (key.error != 0)
         return api.sendMessage(
           "Link Không Tồn Tại Hoặc Sai Link , Vui Lòng Báo Admin",
           event.threadID,
         );
-      let data = await axios.get(
-        `https://api.snaptik.site/video-details-by-key?key=${key.data.key}`,
-      );
-      data = JSON.parse(JSON.stringify(data.data, null, 2));
-      if (data.status !== "success")
-        return api.sendMessage(
-          "Link Không Tồn Tại Hoặc Sai Link , Vui Lòng Báo Admin",
-          event.threadID,
-        );
-      results = {
-        author: data.data.author.nickname,
-        idtiktok: data.data.author.unique_id,
-        description: data.data.description,
-        video: {
-          with_watermark: `https://api.snaptik.site/download?key=${data.data.video.with_watermark}&type=video`,
-          no_watermark: `https://api.snaptik.site/download?key=${data.data.video.no_watermark}&type=video`,
-          no_watermark_raw: data.data.video.no_watermark_raw,
-        },
-        music: `https://api.snaptik.site/download?key=${data.data.music}&type=music`,
-      };
+  
+        results = {
+          author: key.author_video,
+          description: key.title,
+          video: {
+            with_watermark: key.data_watermark[0].url,
+            no_watermark: key.data_nowatermark[0].url,
+          },
+          Mname: key.data_music.title,
+          music: key.data_music.url,
+        };
+        
       var path = __dirname + `/cache/tiktok.mp4`;
       const { data: stream } = await axios.get(results.video.no_watermark, {
         responseType: "arraybuffer",
@@ -53,9 +46,7 @@ module.exports.run = async function ({ api, event, args }) {
       writeFileSync(path, Buffer.from(stream, "utf-8"));
       return api.sendMessage(
         {
-          body: `Tên : ${results.author} | ID TikTok : @${
-            results.idtiktok
-          } | Nội Dung : ${results.description || "Không Có Nội Dung"}`,
+          body: `Tên : ${results.author} | Nội Dung : ${results.description || "Không Có Nội Dung"} | Nhạc: ${results.Mname}`,
           attachment: createReadStream(path),
         },
         threadID,
@@ -63,6 +54,7 @@ module.exports.run = async function ({ api, event, args }) {
         messageID,
       );
     } catch (e) {
+      console.log(e);
       return api.sendMessage(
         "Link Không Tồn Tại Hoặc Sai Link, Hoặc Video Ở Chế Độ riêng tư , Vui Lòng Báo Admin",
         event.threadID,
@@ -86,44 +78,34 @@ module.exports.run = async function ({ api, event, args }) {
             event.messageID,
           );
         let key = await axios.get(
-          `https://api.snaptik.site/video-key?video_url=${args[1]}`,
+          `http://api.leanhtruong.net/api-no-key/tiktok?url=${args[1]}`,
         );
         key = JSON.parse(JSON.stringify(key.data, null, 2));
-        if (key.status !== "success")
+        if (key.error != 0)
           return api.sendMessage(
             "Link Không Tồn Tại Hoặc Sai Link , Vui Lòng Báo Admin",
             event.threadID,
           );
-        let data = await axios.get(
-          `https://api.snaptik.site/video-details-by-key?key=${key.data.key}`,
-        );
-        data = JSON.parse(JSON.stringify(data.data, null, 2));
-        if (data.status !== "success")
-          return api.sendMessage(
-            "Link Không Tồn Tại Hoặc Sai Link , Vui Lòng Báo Admin",
-            event.threadID,
-          );
-        results = {
-          author: data.data.author.nickname,
-          idtiktok: data.data.author.unique_id,
-          description: data.data.description,
-          video: {
-            with_watermark: `https://api.snaptik.site/download?key=${data.data.video.with_watermark}&type=video`,
-            no_watermark: `https://api.snaptik.site/download?key=${data.data.video.no_watermark}&type=video`,
-            no_watermark_raw: data.data.video.no_watermark_raw,
-          },
-          music: `https://api.snaptik.site/download?key=${data.data.music}&type=music`,
-        };
-        var path = __dirname + `/cache/tiktok.m4a`;
+       
+      results = {
+        author: key.author_video,
+        description: key.title,
+        video: {
+          with_watermark: key.data_watermark[0].url,
+          no_watermark: key.data_nowatermark[0].url,
+        },
+        Mname: key.data_music.title,
+        music: key.data_music.url,
+      };
+
+        var path = __dirname + `/cache/tiktok.mp3`;
         const { data: stream } = await axios.get(results.music, {
           responseType: "arraybuffer",
         });
         writeFileSync(path, Buffer.from(stream, "utf-8"));
         return api.sendMessage(
           {
-            body: `Tên : ${results.author} | ID TikTok : @${
-              results.idtiktok
-            } | Nội Dung : ${results.description || "Không Có Nội Dung"}`,
+            body: `Tên : ${results.author} | Nội Dung : ${results.description || "Không Có Nội Dung"} | Nhạc: ${results.Mname}`,
             attachment: createReadStream(path),
           },
           threadID,
@@ -142,34 +124,28 @@ module.exports.run = async function ({ api, event, args }) {
       try {
         let results = {};
         let key = await axios.get(
-          `https://api.snaptik.site/video-key?video_url=${args[0]}`,
+          `http://api.leanhtruong.net/api-no-key/tiktok?url=${args[0]}`,
         );
         key = JSON.parse(JSON.stringify(key.data, null, 2));
-        if (key.status !== "success")
+        
+        if (key.error != 0)
           return api.sendMessage(
             "Link Không Tồn Tại Hoặc Sai Link , Vui Lòng Báo Admin",
             event.threadID,
           );
-        let data = await axios.get(
-          `https://api.snaptik.site/video-details-by-key?key=${key.data.key}`,
-        );
-        data = JSON.parse(JSON.stringify(data.data, null, 2));
-        if (data.status !== "success")
-          return api.sendMessage(
-            "Link Không Tồn Tại Hoặc Sai Link , Vui Lòng Báo Admin",
-            event.threadID,
-          );
-        results = {
-          author: data.data.author.nickname,
-          idtiktok: data.data.author.unique_id,
-          description: data.data.description,
-          video: {
-            with_watermark: `https://api.snaptik.site/download?key=${data.data.video.with_watermark}&type=video`,
-            no_watermark: `https://api.snaptik.site/download?key=${data.data.video.no_watermark}&type=video`,
-            no_watermark_raw: data.data.video.no_watermark_raw,
-          },
-          music: `https://api.snaptik.site/download?key=${data.data.music}&type=music`,
-        };
+       
+         
+      results = {
+        author: key.author_video,
+        description: key.title,
+        video: {
+          with_watermark: key.data_watermark[0].url,
+          no_watermark: key.data_nowatermark[0].url,
+        },
+        Mname: key.data_music.title,
+        music: key.data_music.url,
+      };
+
         var path = __dirname + `/cache/tiktok.mp4`;
         const { data: stream } = await axios.get(results.video.no_watermark, {
           responseType: "arraybuffer",
@@ -177,9 +153,7 @@ module.exports.run = async function ({ api, event, args }) {
         writeFileSync(path, Buffer.from(stream, "utf-8"));
         return api.sendMessage(
           {
-            body: `Tên : ${results.author} | ID TikTok : @${
-              results.idtiktok
-            } | Nội Dung : ${results.description || "Không Có Nội Dung"}`,
+            body: `Tên : ${results.author} | Nội Dung : ${results.description || "Không Có Nội Dung"} | Tên Nhạc: ${results.Mname}`,
             attachment: createReadStream(path),
           },
           threadID,
