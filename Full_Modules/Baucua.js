@@ -2,9 +2,9 @@ module.exports.config = {
     name: "baucua",
     version: "1.0.0",
     hasPermssion: 0,
-    credits: "Horizon Lucius Synthesis I",
+    credits: "KemNasa Synthesis I",
     description: "bầu cua duma mệt",
-    commandCategory: "Penguin",
+    commandCategory: "Duck",
     usages: "baucua + tên + tìn :v",
     cooldowns: 5
 };
