@@ -2,7 +2,7 @@ module.exports.config = {
 	name: "sing",
 	version: "1.0.5",
 	hasPermssion: 0,
-	credits: "Horizon ",
+	credits: "KemNasa",
 	description: "Phát nhạc thông qua link YouTube, SoundCloud hoặc từ khoá tìm kiếm",
 	commandCategory: "media",
 	usages: "sing [Text]",
@@ -103,4 +103,4 @@ module.exports.run = async function({ api, event, args,help }) {
 	}
 }
 
-// vì đang bận project ma sói nên không kịp code kho nhạc + code theo cách riêng của horizon nên lấy tạm cái này đi =))
+// vì đang bận project ma sói nên không kịp code kho nhạc + code theo cách riêng của kemnasa nên lấy tạm cái này đi =))
