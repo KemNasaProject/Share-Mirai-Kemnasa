@@ -2,9 +2,9 @@
                 name: "adminonly",
                 version: "2.0",
                 hasPermssion: 1,
-                credits: "Horizon Lucius",
+                credits: "KemNasa",
                 description: "Chế Độ Dành Riêng Cho QTV Và Admin bot",
-                commandCategory: "Penguin",
+                commandCategory: "Duck",
                 usages: "Jush On/Off",
                 cooldowns: 5
             };
