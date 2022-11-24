@@ -2,9 +2,9 @@ module.exports.config = {
 	name: "tatbot",
 	version: "0.0.1",
 	hasPermssion: 2,
-	credits: "Hỏrỉzỏn", // =))
+	credits: "KẻmNasả", // =))
 	description: "hẹn giờ bật bót",
-	commandCategory: "Horizon",
+	commandCategory: "KemNasa",
 	usages: "[time ( giây )]",
 	cooldowns: 5
 };
